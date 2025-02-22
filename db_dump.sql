@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 15.11
--- Dumped by pg_dump version 15.11
+-- Dumped from database version 15.12
+-- Dumped by pg_dump version 15.12
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -165,6 +165,7 @@ ALTER TABLE ONLY public.sector ALTER COLUMN id SET DEFAULT nextval('public.secto
 --
 
 COPY public.app_user (id, name, agree_to_terms, created_at, updated_at, edit_token) FROM stdin;
+1	Jaak 	t	2025-02-22 20:18:15.425295	2025-02-22 20:18:15.425295	40e2b000-00ec-4593-a0ba-f3f41779760a
 \.
 
 
@@ -173,10 +174,10 @@ COPY public.app_user (id, name, agree_to_terms, created_at, updated_at, edit_tok
 --
 
 COPY public.flyway_schema_history (installed_rank, version, description, type, script, checksum, installed_by, installed_on, execution_time, success) FROM stdin;
-1	1	Create Sector Table	SQL	V1__Create_Sector_Table.sql	-954111302	helmesuser	2025-02-22 00:57:39.330548	17	t
-2	2	Create User Table	SQL	V2__Create_User_Table.sql	1735634729	helmesuser	2025-02-22 00:57:39.378683	17	t
-3	3	Create User Sector Table	SQL	V3__Create_User_Sector_Table.sql	1528873349	helmesuser	2025-02-22 00:57:39.411767	14	t
-4	4	Insert Core Sectors	SQL	V4__Insert_Core_Sectors.sql	1909911200	helmesuser	2025-02-22 00:57:39.44296	19	t
+1	1	Create Sector Table	SQL	V1__Create_Sector_Table.sql	-954111302	helmesuser	2025-02-22 20:17:37.814321	18	t
+2	2	Create User Table	SQL	V2__Create_User_Table.sql	1735634729	helmesuser	2025-02-22 20:17:37.868029	15	t
+3	3	Create User Sector Table	SQL	V3__Create_User_Sector_Table.sql	1896252547	helmesuser	2025-02-22 20:17:37.901001	12	t
+4	4	Insert Core Sectors	SQL	V4__Insert_Core_Sectors.sql	1909911200	helmesuser	2025-02-22 20:17:37.929607	19	t
 \.
 
 
@@ -272,6 +273,7 @@ COPY public.sector (id, name, parent_id) FROM stdin;
 --
 
 COPY public.user_sector (user_id, sector_id) FROM stdin;
+1	44
 \.
 
 
@@ -279,7 +281,7 @@ COPY public.user_sector (user_id, sector_id) FROM stdin;
 -- Name: app_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: helmesuser
 --
 
-SELECT pg_catalog.setval('public.app_user_id_seq', 1, false);
+SELECT pg_catalog.setval('public.app_user_id_seq', 1, true);
 
 
 --
@@ -377,7 +379,7 @@ ALTER TABLE ONLY public.sector
 --
 
 ALTER TABLE ONLY public.user_sector
-    ADD CONSTRAINT user_sector_sector_id_fkey FOREIGN KEY (sector_id) REFERENCES public.sector(id);
+    ADD CONSTRAINT user_sector_sector_id_fkey FOREIGN KEY (sector_id) REFERENCES public.sector(id) ON DELETE RESTRICT;
 
 
 --
@@ -385,7 +387,7 @@ ALTER TABLE ONLY public.user_sector
 --
 
 ALTER TABLE ONLY public.user_sector
-    ADD CONSTRAINT user_sector_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_user(id);
+    ADD CONSTRAINT user_sector_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_user(id) ON DELETE CASCADE;
 
 
 --
