@@ -1,0 +1,41 @@
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: helmes_backend
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/helmesdb
+      SPRING_DATASOURCE_USERNAME: helmesuser
+      SPRING_DATASOURCE_PASSWORD: secret
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+       - NEXT_PUBLIC_API_URL=http://localhost:8080/api
+    container_name: helmes_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: helmes_postgres
+    environment:
+      POSTGRES_DB: helmesdb
+      POSTGRES_USER: helmesuser
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
